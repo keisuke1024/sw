@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ストップウォッチ</title>
+    <style>
+        body {
+            text-align: center;
+        }
+        #display {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        #controls {
+            display: flex;
+            justify-content: center;
+        }
+        button {
+            font-size: 24px;
+            margin: 0 10px;
+            padding: 10px 20px;
+        }
+        .disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>ストップウォッチ</h1>
+    <div id="display">0:00:00</div>
+    <div id="controls">
+        <button id="startStop" onclick="startStop()">スタート</button>
+        <button id="reset" onclick="reset()" class="disabled">リセット</button>
+    </div>
+
+    <script>
+        let timer;
+        let isRunning = false;
+        let seconds = 0;
+        let minutes = 0;
+        let hours = 0;
+
+        const display = document.getElementById("display");
+        const startStopButton = document.getElementById("startStop");
+        const resetButton = document.getElementById("reset");
+
+        function startStop() {
+            if (isRunning) {
+                clearInterval(timer);
+                startStopButton.textContent = "スタート";
+                resetButton.classList.remove("disabled");
+            } else {
+                timer = setInterval(updateTime, 1000);
+                startStopButton.textContent = "ストップ";
+                resetButton.classList.add("disabled");
+            }
+            isRunning = !isRunning;
+        }
+
+        function reset() {
+            clearInterval(timer);
+            seconds = 0;
+            minutes = 0;
+            hours = 0;
+            display.textContent = "0:00:00";
+            startStopButton.textContent = "スタート";
+            resetButton.classList.add("disabled");
+            isRunning = false;
+        }
+
+        function updateTime() {
+            seconds++;
+            if (seconds === 60) {
+                seconds = 0;
+                minutes++;
+                if (minutes === 60) {
+                    minutes = 0;
+                    hours++;
+                }
+            }
+            display.textContent = `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+    </script>
+</body>
+</html>
